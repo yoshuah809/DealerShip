@@ -102,5 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
 # Ignore Local Settings File
-local_settings.py
+local_settings.py 
+CarDealererd.drawio
