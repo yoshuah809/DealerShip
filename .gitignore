@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+# Ignore Local Settings File
+local_settings.py
