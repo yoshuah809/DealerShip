@@ -7,6 +7,9 @@ from django.db.models.fields import CharField, DateField
 class Vehicle_Type(models.Model):
     vehicle_type=models.CharField(max_length=15)
 
+class Fuel_Type(models.Model):
+    fuel_type=models.CharField(max_length=20)
+
 number_of_doors_choices = (   
     (2,2),
     (4,4),  
@@ -17,12 +20,7 @@ rowseat_choices = (
     (2,2),
     (3,3),
 )
-fueltype_choices =(
-    ('Gas','Gas'),
-    ('Diesel','Diesel'),
-    ('Hybrid','Hybrid'),
-    ('Electric','Electric'),
-)
+
 transmission_type_choices = (
     ('Automatic','Automatic'),
     ('Manual','Manual'),
@@ -34,10 +32,10 @@ class Vehicle(models.Model):
     model = models.CharField(max_length=30)
     mfr = models.IntegerField()
     color = models.CharField(max_length=20)
-    type = models.ForeignKey(Vehicle_Type, default=None, on_delete=models.PROTECT)
+    type = models.ForeignKey(Vehicle_Type, default='Sedan', on_delete=models.PROTECT)
     purchased_date = DateField()
     date_sold = DateField(blank=True, null=True)
-    fuel_type = models.CharField(max_length=15, choices=fueltype_choices, default='Gas')
+    fuel_type = models.ForeignKey(Fuel_Type, default='Gas', on_delete=models.PROTECT)
     features = models.CharField(max_length=100)
     number_of_doors = models.IntegerField(choices=number_of_doors_choices, default=4)
     rowseat = models.IntegerField(choices=rowseat_choices, default=2)
