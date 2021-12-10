@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'authentication.apps.AuthenticationConfig',
     'corsheaders',
-    'vehicle',
+
+    'vehicle.apps.VehicleConfig',
 
 
 

@@ -24,6 +24,7 @@ urlpatterns = [
     path('api/auth/', include('authentication.urls')),
     path('api/get_all_vehicles/', include('vehicle.urls')),
     path('api/', include('vehicle.urls')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

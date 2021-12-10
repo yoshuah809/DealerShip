@@ -2,13 +2,15 @@ from django.db import models
 from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from .models import Vehicle
 from .serializers import VehicleSerializer, UserSerializer
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.http import JsonResponse
 from drf_jwt_capstone_backend import data
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 @api_view(['GET'])
@@ -23,6 +25,7 @@ def getRoutes(request):
         'api/vehicle/<update>/<id>/',
 
         'api/users/profile/'
+        'api/users/'
     ]
     return Response(routes)
 
@@ -60,4 +63,12 @@ def register_vehicle(request):
 def getUserProfile(request):
     user = request.user
     serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getUsers(request):
+    user = User.objects.all()
+    serializer = UserSerializer(user, many=True)
     return Response(serializer.data)
