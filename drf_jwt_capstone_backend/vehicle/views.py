@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from .models import Vehicle
-from .serializers import VehicleSerializer
+from .serializers import VehicleSerializer, UserSerializer
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from drf_jwt_capstone_backend import data
@@ -21,6 +21,8 @@ def getRoutes(request):
         'api/vehicle/<id>/',
         'api/vehicle/delete/'
         'api/vehicle/<update>/<id>/',
+
+        'api/users/profile/'
     ]
     return Response(routes)
 
@@ -51,3 +53,11 @@ def register_vehicle(request):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)

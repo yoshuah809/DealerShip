@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from .serializers import RegistrationSerializer
+from .serializers import MyTokenObtainPairSerializer, RegistrationSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -11,16 +11,6 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = RegistrationSerializer
-
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
-
-        data['username'] = self.user.username
-        data['email'] = self.user.email
-
-        return data
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

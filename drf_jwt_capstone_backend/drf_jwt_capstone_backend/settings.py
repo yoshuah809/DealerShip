@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
     'corsheaders',
     'vehicle',
-    
-    
+
+
+
 ]
 
 MIDDLEWARE = [
