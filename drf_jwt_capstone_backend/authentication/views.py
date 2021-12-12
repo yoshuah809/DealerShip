@@ -34,7 +34,7 @@ def get_users(request):
         raise Http404
 
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def UpdateUserProfile(request):
     user = request.user
@@ -45,9 +45,18 @@ def UpdateUserProfile(request):
     user.last_name = data['last_name']
     user.middle_name = data['middle_name']
     user.email = data['email']
-    user.first_name = data['first_name']
+
     if data['password'] != '':
         user.password = make_password(data['password'])
+
     user.save()
 
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getUserById(request, pk):
+    user = User.objects.get(id=pk)
+    serializer = UserSerializer(User, many=False)
     return Response(serializer.data)

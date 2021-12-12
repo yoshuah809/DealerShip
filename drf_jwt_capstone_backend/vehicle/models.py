@@ -21,42 +21,26 @@ class Fuel_Type(models.Model):
 
 class Vehicle(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    VIN = models.CharField(max_length=50)
-    make = models.CharField(max_length=30)
-    model = models.CharField(max_length=30)
-    mfr = models.IntegerField()
-    color = models.CharField(max_length=20)
-    vehicle_type = models.ForeignKey(
-        Vehicle_Type, default=1, on_delete=models.PROTECT)
+    VIN = models.CharField(max_length=50, blank=True, null=True)
+    make = models.CharField(max_length=30, blank=True, null=True)
+    model = models.CharField(max_length=30, blank=True, null=True)
+    mfr = models.IntegerField(blank=True, null=True)
+    color = models.CharField(max_length=20, blank=True, null=True)
+    vehicle_type = models.CharField(max_length=50, default='Sedan')
     main_image = models.ImageField(upload_to='images')
     image1 = models.ImageField(upload_to='images', blank=True)
     image2 = models.ImageField(upload_to='images', blank=True)
     image3 = models.ImageField(upload_to='images', blank=True)
     purchased_date = DateField()
     date_sold = DateField(blank=True, null=True)
-    fuel_type = models.ForeignKey(
-        Fuel_Type, default=1, on_delete=models.PROTECT)
-    features = models.CharField(max_length=100)
-    number_of_doors_choices = (
-        (2, 2),
-        (4, 4),
-        (6, 6),
-    )
-    number_of_doors = models.IntegerField(
-        choices=number_of_doors_choices, default=4)
-
-    rowseat_choices = (
-        (1, 1),
-        (2, 2),
-        (3, 3),
-    )
-    rowseat = models.IntegerField(choices=rowseat_choices, default=2)
-    transmission_type_choices = (
-        ('Automatic', 'Automatic'),
-        ('Manual', 'Manual'),
-    )
+    fuel_type = models.CharField(
+        max_length=20, default='Gas', blank=True, null=True)
+    features = models.CharField(max_length=100, blank=True, null=True)
+    number_of_doors = models.CharField(
+        max_length=20, default='4', blank=True, null=True)
+    rowseat = models.IntegerField(blank=True, null=True, default=2)
     transmission = models.CharField(
-        max_length=20, choices=transmission_type_choices, default='Automatic')
+        max_length=20,  default='Automatic', blank=True, null=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     isSold = models.BooleanField(default=False)
 
@@ -67,13 +51,15 @@ class Vehicle(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     paymentMethod = models.CharField(max_length=30, null=True, blank=True)
-    taxPrice = models.DecimalField(max_digits=7, decimal_places=2)
+    dealerFees = models.DecimalField(max_digits=7, decimal_places=2)
     shippingPrice = models.DecimalField(max_digits=7, decimal_places=2)
     totalPrice = models.DecimalField(max_digits=7, decimal_places=2)
+
     isPaid = models.BooleanField(default=False)
     paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     isDelivered = models.BooleanField(default=False)
-    shippingDate = models.DateTimeField()
+    shippingDate = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True)
     createdAt = models.DateTimeField(
         auto_now_add=True, null=True, blank=True)
 
@@ -87,7 +73,6 @@ class OrderItem(models.Model):
     make = models.CharField(max_length=30, null=True, blank=True)
     model = models.CharField(max_length=30, null=True, blank=True)
     VIN = models.CharField(max_length=30, null=True, blank=True)
-    image = models.CharField(max_length=200, null=True, blank=True)
     priceSold = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self):
@@ -97,11 +82,12 @@ class OrderItem(models.Model):
 class ShippingAddress(models.Model):
     order = models.OneToOneField(
         Order, on_delete=models.CASCADE, null=True, blank=True)
+    dealername = models.CharField(max_length=200, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
     postalCode = models.CharField(max_length=200, null=True, blank=True)
     country = models.CharField(max_length=200, null=True, blank=True)
-    shippingPrice = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self):
         return str(self.address)
