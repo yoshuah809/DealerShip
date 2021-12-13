@@ -1,6 +1,7 @@
 from django.db import models
 from rest_framework import serializers, status
 from rest_framework.fields import DateTimeField
+from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -139,6 +140,15 @@ def addOrderItems(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def getMyOrders(request):
+    user = request.user
+    orders = user.order_set.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getOrderById(request, pk):
 
     user = request.user
@@ -158,10 +168,11 @@ def getOrderById(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request, pk):
+
     order = Order.objects.get(id=pk)
 
     order.isPaid = True
-    order.paidAt = DateTimeField.now()
+    order.paidAt = datetime.now()
     order.save()
 
     return Response('Order was paid')
