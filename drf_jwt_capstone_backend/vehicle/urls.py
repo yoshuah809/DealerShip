@@ -12,6 +12,7 @@ urlpatterns = [
     path('users/<str:pk>/', views.getUserById, name="user"),
     path('users/update/<str:pk>/', views.updateUser, name="user-update"),
 
+    path('vehicles/create/', views.createVehicle, name="vehicle-create"),
     path('vehicles/<int:id>', views.getVehicle, name="vehicle"),
     path('orders/add/', views.addOrderItems, name="get-order"),
     path('orders/myorders/', views.getMyOrders, name="my-orders"),

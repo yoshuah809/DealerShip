@@ -219,3 +219,27 @@ def deleteVehicle(request, pk):
     vehicle = Vehicle.objects.get(id=pk)
     vehicle.delete()
     return Response('Vehicle Deleted')
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def createVehicle(request):
+    user = request.user
+
+    vehicle = Vehicle.objects.create(
+        user=user,
+        make='Sample vehicle',
+        model='sample model',
+        price=19500,
+        VIN='12385',
+        mfr=2014,
+        fuel_type='Gas',
+        transmission='Automatic',
+        color='Blue',
+        number_of_doors=4,
+        purchased_date='2001-01-01'
+
+    )
+
+    serializer = VehicleSerializer(vehicle, many=False)
+    return Response(serializer.data)
