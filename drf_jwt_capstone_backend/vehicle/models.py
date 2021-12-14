@@ -25,6 +25,7 @@ class Vehicle(models.Model):
     make = models.CharField(max_length=30, blank=True, null=True)
     model = models.CharField(max_length=30, blank=True, null=True)
     mfr = models.IntegerField(blank=True, null=True)
+    # millage = models.IntegerField(blank=True, null=True, default=50000)
     color = models.CharField(max_length=20, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, default='Sedan')
     main_image = models.ImageField(upload_to='images')
