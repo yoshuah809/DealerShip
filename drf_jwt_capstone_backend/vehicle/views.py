@@ -221,6 +221,35 @@ def deleteVehicle(request, pk):
     return Response('Vehicle Deleted')
 
 
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def updateVehicle(request, pk):
+    data = request.data
+    vehicle = Vehicle.objects.get(id=pk)
+
+    vehicle.make = data['make']
+    vehicle.model = data['model']
+    vehicle.mfr = data['mfr']
+    vehicle.VIN = data['VIN']
+    vehicle.number_of_doors = data['number_of_doors']
+    vehicle.millage = data['millage']
+    vehicle.vehicle_type = data['vehicle_type']
+    vehicle.main_image = data['main_image']
+    vehicle.purchased_date = data['purchased_date']
+    vehicle.date_sold = data['date_sold']
+    vehicle.fuel_type = data['fuel_type']
+    vehicle.features = data['features']
+    vehicle.rowseat = data['rowseat']
+    vehicle.transmission = data['transmission']
+    vehicle.price = data['price']
+    vehicle.isSold = data['isSold']
+
+    vehicle.save()
+
+    serializer = VehicleSerializer(vehicle, many=False)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createVehicle(request):
