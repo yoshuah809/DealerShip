@@ -29,7 +29,7 @@ class Vehicle(models.Model):
     color = models.CharField(max_length=20, blank=True, null=True)
     vehicle_type = models.CharField(max_length=50, default='Sedan')
     main_image = models.ImageField(
-        upload_to='images', null=True, blank=True, default='/images/sample.jpg')
+        upload_to='images', null=True, blank=True, default='/sample.jpg')
     image1 = models.ImageField(upload_to='images', blank=True)
     image2 = models.ImageField(upload_to='images', blank=True)
     image3 = models.ImageField(upload_to='images', blank=True)
@@ -58,10 +58,11 @@ class Order(models.Model):
     totalPrice = models.DecimalField(max_digits=7, decimal_places=2)
 
     isPaid = models.BooleanField(default=False)
-    paidAt = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    paidAt = models.DateField(
+        auto_now_add=False, null=True, blank=True, default='2021-12-12')
     isDelivered = models.BooleanField(default=False)
     shippingDate = models.DateTimeField(
-        auto_now_add=True, null=True, blank=True)
+        auto_now_add=False, null=True, blank=True)
     createdAt = models.DateTimeField(
         auto_now_add=True, null=True, blank=True)
 

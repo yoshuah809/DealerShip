@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework import serializers, status
 from rest_framework.fields import DateTimeField
-from datetime import datetime
+from datetime import date
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
@@ -81,6 +81,7 @@ def getUsers(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def addOrderItems(request):
+
     user = request.user
     data = request.data
 
@@ -98,7 +99,7 @@ def addOrderItems(request):
             dealerFees=data['dealerFees'],
             shippingPrice=data['shippingPrice'],
             totalPrice=data['totalPrice'],
-            isPaid=True,
+
 
 
         )
@@ -168,11 +169,11 @@ def getOrderById(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def updateOrderToPaid(request, pk):
-
+    today = date.today()
     order = Order.objects.get(id=pk)
 
     order.isPaid = True
-    order.paidAt = datetime.now()
+    order.paidAt = today
     order.save()
 
     return Response('Order was paid')
@@ -271,4 +272,25 @@ def createVehicle(request):
     )
 
     serializer = VehicleSerializer(vehicle, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def uploadImage(request):
+    data = request.data
+
+    vehicleid = data['vehicleid']
+    vehicle = Vehicle.objects.get(id=vehicleid)
+
+    vehicle.image = request.FILES.get('main_image')
+    vehicle.save()
+
+    return Response('Image was uploaded')
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getOrders(request):
+    orders = Order.objects.all()
+    serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)

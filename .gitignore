@@ -107,3 +107,4 @@ dist
 local_settings.py 
 CarDealererd.drawio
 data.py
+media/
